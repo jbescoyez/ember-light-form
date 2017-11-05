@@ -1,0 +1,26 @@
+{{#if label}}
+  <label for={{controlId}}>
+    {{label}} <span class="field__errors">({{errors}})</span>
+  </label>
+{{/if}}
+
+{{#if hasBlock}}
+  {{yield
+    (hash
+      controlId=controlId
+      value=(get model fieldName)
+      enterEditMode=(action 'enterEditMode')
+      leaveEditMode=(action 'leaveEditMode')
+      update=(action 'update')
+    )
+  }}
+{{else}}
+  {{component control
+    id=controlId
+    value=(get model fieldName)
+    onfocus=(action 'enterEditMode')
+    onblur=(action 'leaveEditMode')
+    update=(action 'update')
+  }}
+{{/if}}
+
