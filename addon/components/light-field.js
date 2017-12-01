@@ -12,8 +12,8 @@ const {
 const Field = Component.extend({
   // -- Properties --
   layout,
-  classNames: ['field'],
-  classNameBindings: ['isDisplayingErrors:field--with-errors'],
+  classNames: ['light-field'],
+  classNameBindings: ['isDisplayingErrors:light-field--with-errors'],
   isEdited: false,
   isErrorDisplayForced: true,
   isTouched: false,
@@ -75,7 +75,9 @@ const Field = Component.extend({
   },
 
   _resetAttrs() {
-    setProperties(this, { isTouched: false, wasDisplayingErrors: false });
+    setProperties(this, {
+      isTouched: false, wasDisplayingErrors: false, isEdited: false
+    });
   },
 
   // -- Actions --

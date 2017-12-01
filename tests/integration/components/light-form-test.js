@@ -1,17 +1,20 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from 'ember-test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+
 import Ember from 'ember';
+
 import { find, triggerEvent } from 'ember-native-dom-helpers';
 
 let { get, set } = Ember;
 let { Promise } = Ember.RSVP;
 
-
 const modelStub = (modelName, modelId) => {
   return Ember.Object.create({
     constructor: { modelName: modelName },
     id: modelId,
-    validations: { isValid: true },
+    isValid: true,
     validate() { return new Promise((resolve) => { resolve(); }); }
   });
 };
@@ -19,13 +22,13 @@ const modelStub = (modelName, modelId) => {
 const modelWithErrorsStub = (modelName, modelId) => {
   let model = modelStub(modelName, modelId);
 
-  set(model, 'validations', { isValid: false })
+  set(model, 'isValid', false)
 
   return model;
 };
 
-const renderForm = (world) => {
-  world.render(
+const renderForm = () => {
+  return render(
     hbs`
       {{light-form model
         action=action
@@ -36,104 +39,106 @@ const renderForm = (world) => {
   );
 }
 
-moduleForComponent(
-  'light-form', 'Integration | Component | light form', {
-    integration: true,
-    beforeEach() { set(this, 'model', modelStub('aModel', 'anId')); }
-  }
-);
+module('light-form', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('has "light-form" class', function(assert) {
-  renderForm(this);
+  hooks.beforeEach(function() {
+    set(this, 'model', modelStub('aModel', 'anId'));
+  });
 
-  assert.ok(find('.light-form'));
-});
+  test('has "light-form" class', async function(assert) {
+    await renderForm(this);
 
-test(
-  'has no "light-form--validating" class after submit',
-  async function(assert) {
-    renderForm(this);
+    assert.ok(find('.light-form'));
+  });
 
-    await triggerEvent('.light-form', 'submit');
+  test(
+    'has no "light-form--validating" class after submit',
+    async function(assert) {
+      await renderForm(this);
 
-    assert.notOk(find('.light-form--validating'));
-  }
-);
+      await triggerEvent('.light-form', 'submit');
 
-test(
-  'validate on submit',
-  function(assert) {
-    assert.expect(1);
-
-    const originalModel = get(this, 'model');
-    originalModel.validate = () => {
-      return new Promise((resolve) => { assert.ok(true); resolve(); });
+      assert.notOk(find('.light-form--validating'));
     }
+  );
 
-    renderForm(this);
+  test(
+    'validate on submit',
+    async function(assert) {
+      assert.expect(1);
 
-    triggerEvent('.light-form', 'submit');
-  }
-);
+      const originalModel = get(this, 'model');
+      originalModel.validate = () => {
+        return new Promise((resolve) => { assert.ok(true); resolve(); });
+      }
 
-test(
-  'invoke "action" on submit',
-  function(assert) {
-    assert.expect(1);
+      await renderForm(this);
+
+      triggerEvent('.light-form', 'submit');
+    }
+  );
+
+  test(
+    'invoke "action" on submit',
+    async function(assert) {
+      assert.expect(1);
 
 
-    const originalModel = get(this, 'model');
-    set(this, 'action', (model) => {
-      assert.equal(get(model, 'id'), get(originalModel, 'id'))
+      const originalModel = get(this, 'model');
+      set(this, 'action', (model) => {
+        assert.equal(get(model, 'id'), get(originalModel, 'id'))
+      });
+
+      await renderForm(this);
+
+      triggerEvent('.light-form', 'submit');
+    }
+  );
+
+  test(
+    'invoke "onDestroy" when removed from DOM',
+    async function(assert) {
+      assert.expect(1);
+
+      const originalModel = get(this, 'model');
+      set(this, 'onDestroy', (model) => {
+        assert.equal(model, originalModel);
+      });
+
+      await renderForm(this);
+    }
+  );
+
+  module('with errors', function(hooks) {
+    hooks.beforeEach(function() {
+      set(this, 'model', modelWithErrorsStub());
     });
 
-    renderForm(this);
+    test(
+      'invoke "onError" on submit',
+      async function(assert) {
+        assert.expect(1);
 
-    triggerEvent('.light-form', 'submit');
-  }
-);
+        const originalModel = get(this, 'model');
+        set(this, 'onError', (model) => {
+          assert.equal(model, originalModel);
+        });
 
-test(
-  'invoke "onDestroy" when removed from DOM',
-  function(assert) {
-    assert.expect(1);
+        await renderForm(this);
 
-    const originalModel = get(this, 'model');
-    set(this, 'onDestroy', (model) => {
-      assert.equal(model, originalModel);
+        triggerEvent('.light-form', 'submit');
+      }
+    );
+
+    test('has "light-form--validating" class after submit', async function(assert) {
+      await renderForm(this);
+
+      await triggerEvent('.light-form', 'submit');
+
+      assert.ok(find('.light-form--validating'));
     });
-
-    renderForm(this);
-  }
-);
-
-moduleForComponent(
-  'light-form', 'Integration | Component | light form with errors', {
-    integration: true,
-    beforeEach() { set(this, 'model', modelWithErrorsStub()); }
-  }
-);
-
-test(
-  'invoke "onError" on submit',
-  function(assert) {
-    assert.expect(1);
-
-    const originalModel = get(this, 'model');
-    set(this, 'onError', (model) => {
-      assert.equal(model, originalModel);
-    });
-
-    renderForm(this);
-
-    triggerEvent('.light-form', 'submit');
-  }
-);
-
-test('has "light-form--validating" class after submit', async function(assert) {
-  renderForm(this);
-
-  await triggerEvent('.light-form', 'submit');
-
-  assert.ok(find('.light-form--validating'));
+  });
 });
+
+

@@ -1,26 +1,21 @@
 # ember-light-form
 
-This README outlines the details of collaborating on this Ember addon.
+This addon provides a flexible framework to manage form states and validations.
+It allows to use any form control component (e.g. one-way-controls, ember-power-select,...) .
 
-## Installation
+## Example
 
-* `git clone <repository-url>` this repository
-* `cd ember-light-form`
-* `npm install`
+```hbs
+{{#light-form (changeset post PostValidations) action=(action "createPost") as |f| }}
+  {{f.field "title" label="Title" control=(component f.text autofocus=true)}}
+  {{f.field "description" label="Description" control=f.textarea}}
 
-## Running
+  <div class="form-actions">
+    <button class="action-button action-button__main">
+      {{if f.isRunning "Saving..." "Save"}}
+    </button>
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-
-## Running Tests
-
-* `npm test` (Runs `ember try:each` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
-
-## Building
-
-* `ember build`
-
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+    {{link-to 'Cancel' 'index' class="cancel-button"}}
+  </div>
+{{/light-form}}
+```

@@ -1,15 +1,20 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from 'ember-test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import Ember from 'ember';
-import { triggerEvent, find, fillIn } from 'ember-native-dom-helpers';
 
-let { Component } = Ember;
+import Ember from 'ember';
+
+import { triggerEvent, find, fillIn, waitUntil }
+  from 'ember-native-dom-helpers';
+
+let { Component, get, set } = Ember;
 
 const modelWithErrorsStub = (modelName, modelId) => {
   return Ember.Object.create({
     constructor: { modelName: modelName },
     id: modelId,
-    validations: { attrs: { test: { messages: ['errorMessage'] } } }
+    error: { test: { validation: ['errorMessage'] } }
   });
 };
 
@@ -17,17 +22,20 @@ const controlStub = () => {
   return Component.extend({
     tagName: 'input',
     classNames: ['dummy-control'],
-    attributeBindings: ['value', 'onblur', 'onfocus', 'oninput', 'onchange']
+    attributeBindings: ['value', 'onblur', 'onfocus', 'oninput', 'onchange'],
+    input(event) { get(this, 'update')(event.target.value); },
+    change(event) { get(this, 'update')(event.target.value); }
   });
 };
 
-const renderField = (world) => {
-  world.register('component:dummy-control', controlStub());
+const renderField = function () {
+  this.owner.register('component:dummy-control', controlStub());
 
-  if (!world.get('fieldName')) { world.set('fieldName', 'test') }
+  if (!get(this, 'fieldName')) { set(this, 'fieldName', 'test') }
 
-  world.render(
-    hbs`{{light-field fieldName
+  return render(
+    hbs`
+    {{light-field fieldName
       label=label
       model=model
       isErrorDisplayForced=isErrorDisplayForced
@@ -36,126 +44,145 @@ const renderField = (world) => {
   );
 }
 
-moduleForComponent(
-  'light-field', 'Integration | Component | light field', { integration: true }
-);
+module('light-field', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('has "field" class', function(assert) {
-  renderField(this);
+  test('has "light-field" class', async function(assert) {
+    await renderField.call(this);
+    assert.ok(find('.light-field'));
+  });
 
-  assert.ok(find('.field'));
-});
+  test('has a specific id for the model', async function(assert) {
+    const modelName = 'modelName';
+    const modelId = 'modelId';
+    const fieldName = 'fieldName';
 
-test('has a specific label for the model', function(assert) {
-  const modelName = 'modelName';
-  const modelId = 'modelId';
-  const fieldName = 'modelId';
+    set(this, 'model', modelWithErrorsStub(modelName, modelId));
+    set(this, 'fieldName', fieldName);
 
-  this.set('model', modelWithErrorsStub(modelName, modelId));
-  this.set('fieldName', fieldName);
+    await renderField.call(this);
 
-  renderField(this);
+    assert.ok(find(`.light-field input#${modelName}-${modelId}-${fieldName}`));
+  });
 
-  assert.ok(find(`.field input#${modelName}-${modelId}-${fieldName}`));
-});
+  test('label is visible if set', async function(assert) {
+    const label = 'Foobar';
+    set(this, 'label', label);
 
-test('label is visible if set', function(assert) {
-  const label = 'Fooabr';
-  this.set('label', label);
+    await renderField.call(this);
 
-  renderField(this);
+    assert.ok(find('label').textContent.includes(label));
+  });
 
-  assert.ok(find('label').textContent.includes(label));
-});
+  test('model is updated when field is filled in', async function(assert) {
+    const fieldName = 'stub';
+    const value = 'some text';
 
-test('model is updated when field is filled in', async function(assert) {
-  const fieldName = 'stub';
-  const value = 'some text';
+    set(this, 'model', modelWithErrorsStub());
+    set(this, 'fieldName', fieldName);
 
-  this.set('model', modelWithErrorsStub());
-  this.set('fieldName', fieldName);
+    await renderField.call(this);
 
-  renderField(this);
+    await fillIn('.dummy-control', value);
 
-  await fillIn('.dummy-control', value);
+    assert.equal(get(this, `model.${fieldName}`), value);
+  });
 
-  assert.equal(this.get(`model.${fieldName}`), value);
-});
+  module('with errors',function(hooks) {
 
-moduleForComponent(
-  'light-field', 'Integration | Component | light field with errors', {
-    integration: true,
-    beforeEach() { this.set('model', modelWithErrorsStub()); }
-  }
-);
+    hooks.beforeEach(function () {
+      set(this, 'model', modelWithErrorsStub());
+    });
 
-test('errors are not displayed by default', function(assert) {
-  renderField(this);
+    test('errors are not displayed by default', async function(assert) {
+      await renderField.call(this);
 
-  assert.notOk(find('.field').classList.contains('field--with-errors'));
-});
+      assert.notOk(
+        find('.light-field').classList.contains('light-field--with-errors')
+      );
+    });
 
-test('errors are displayed when forced', function(assert) {
-  this.set('isErrorDisplayForced', true);
+    test('errors are displayed when forced', async function(assert) {
+      set(this, 'isErrorDisplayForced', true);
 
-  renderField(this);
+      await renderField.call(this);
 
-  assert.ok(find('.field').classList.contains('field--with-errors'));
-});
+      assert.ok(
+        find('.light-field').classList.contains('light-field--with-errors')
+      );
+    });
 
-test('errors are displayed when control is changed', async function(assert) {
-  renderField(this);
+    test('errors are displayed when control is changed', async function(assert) {
+      await renderField.call(this);
 
-  await triggerEvent('.dummy-control', 'change');
+      await triggerEvent('.dummy-control', 'change');
 
-  assert.ok(find('.field').classList.contains('field--with-errors'));
-});
+      assert.ok(
+        find('.light-field').classList.contains('light-field--with-errors')
+      );
+    });
 
-test('errors are displayed when control is touched and not edited',
-  async function(assert) {
-    renderField(this);
+    test('errors are displayed when control is touched and not edited',
+      async function(assert) {
+        await renderField.call(this);
 
-    await triggerEvent('.dummy-control', 'focus');
-    await triggerEvent('.dummy-control', 'input');
-    await triggerEvent('.dummy-control', 'blur');
+        await triggerEvent('.dummy-control', 'focus');
+        await triggerEvent('.dummy-control', 'input');
+        await triggerEvent('.dummy-control', 'blur');
 
-    assert.ok(find('.field').classList.contains('field--with-errors'));
-  }
-);
+        assert.ok(
+          find('.light-field').classList.contains('light-field--with-errors')
+        );
+      }
+    );
 
-test('errors are not displayed when control is edited without errors and then \
-  touched',
-  async function(assert) {
-    renderField(this);
+    test('errors are not displayed when control is edited without errors and then \
+      touched',
+      async function(assert) {
+        await renderField.call(this);
 
-    await triggerEvent('.dummy-control', 'focus');
-    await triggerEvent('.dummy-control', 'input');
+        await triggerEvent('.dummy-control', 'focus');
+        await triggerEvent('.dummy-control', 'input');
 
-    assert.notOk(find('.field').classList.contains('field--with-errors'));
-  }
-);
+        assert.notOk(
+          find('.light-field').classList.contains('light-field--with-errors')
+        );
+      }
+    );
 
-test('errors are displayed when control is edited with errors',
-  async function(assert) {
-    renderField(this);
+    test('errors are displayed when control is edited with errors',
+      async function(assert) {
+        await renderField.call(this);
 
-    await triggerEvent('.dummy-control', 'focus');
-    await triggerEvent('.dummy-control', 'input');
-    await triggerEvent('.dummy-control', 'blur');
-    await triggerEvent('.dummy-control', 'focus');
+        await triggerEvent('.dummy-control', 'focus');
+        await triggerEvent('.dummy-control', 'input');
+        await triggerEvent('.dummy-control', 'blur');
+        await triggerEvent('.dummy-control', 'focus');
 
-    assert.ok(find('.field').classList.contains('field--with-errors'));
-  }
-);
+        assert.ok(
+          find('.light-field').classList.contains('light-field--with-errors')
+        );
+      }
+    );
 
-test('errors are cleared when model is changed', async function(assert) {
-  renderField(this);
+    test('errors are cleared when model is changed', async function(assert) {
+      await renderField.call(this);
 
-  await triggerEvent('.dummy-control', 'change');
+      await triggerEvent('.dummy-control', 'change');
 
-  assert.ok(find('.field').classList.contains('field--with-errors'));
+      assert.ok(find('.light-field').classList.contains('light-field--with-errors'));
 
-  this.set('model', modelWithErrorsStub());
+      set(this, 'model', modelWithErrorsStub('test 2', 123));
 
-  assert.notOk(find('.field').classList.contains('field--with-errors'));
+      await triggerEvent('.dummy-control', 'change');
+
+      await waitUntil(() => {
+        return !find('.light-field').classList.contains('light-field--with-errors');
+      });
+
+      assert.notOk(
+        find('.light-field').classList.contains('light-field--with-errors')
+      );
+    });
+  });
 });
