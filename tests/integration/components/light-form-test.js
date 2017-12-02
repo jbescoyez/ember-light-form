@@ -63,73 +63,60 @@ module('light-form', function(hooks) {
     }
   );
 
-  test(
-    'validate on submit',
-    async function(assert) {
-      assert.expect(1);
+  test('validate on submit', async function(assert) {
+    assert.expect(1);
 
-      const originalModel = get(this, 'model');
-      originalModel.validate = () => {
-        return new Promise((resolve) => { assert.ok(true); resolve(); });
-      }
-
-      await renderForm(this);
-
-      triggerEvent('.light-form', 'submit');
+    const originalModel = get(this, 'model');
+    originalModel.validate = () => {
+      return new Promise((resolve) => { assert.ok(true); resolve(); });
     }
-  );
 
-  test(
-    'invoke "action" on submit',
-    async function(assert) {
-      assert.expect(1);
+    await renderForm(this);
 
+    triggerEvent('.light-form', 'submit');
+  });
 
-      const originalModel = get(this, 'model');
-      set(this, 'action', (model) => {
-        assert.equal(get(model, 'id'), get(originalModel, 'id'))
-      });
+  test('invoke "action" on submit', async function(assert) {
+    assert.expect(1);
 
-      await renderForm(this);
+    const originalModel = get(this, 'model');
+    set(this, 'action', (model) => {
+      assert.equal(get(model, 'id'), get(originalModel, 'id'))
+    });
 
-      triggerEvent('.light-form', 'submit');
-    }
-  );
+    await renderForm(this);
 
-  test(
-    'invoke "onDestroy" when removed from DOM',
-    async function(assert) {
-      assert.expect(1);
+    triggerEvent('.light-form', 'submit');
+  });
 
-      const originalModel = get(this, 'model');
-      set(this, 'onDestroy', (model) => {
-        assert.equal(model, originalModel);
-      });
+  test('invoke "onDestroy" when removed from DOM', async function(assert) {
+    assert.expect(1);
 
-      await renderForm(this);
-    }
-  );
+    const originalModel = get(this, 'model');
+    set(this, 'onDestroy', (model) => {
+      assert.equal(model, originalModel);
+    });
+
+    await renderForm(this);
+  });
 
   module('with errors', function(hooks) {
     hooks.beforeEach(function() {
       set(this, 'model', modelWithErrorsStub());
     });
 
-    test(
-      'invoke "onError" on submit',
-      async function(assert) {
-        assert.expect(1);
+    test('invoke "onError" on submit', async function(assert) {
+      assert.expect(1);
 
-        const originalModel = get(this, 'model');
-        set(this, 'onError', (model) => {
-          assert.equal(model, originalModel);
-        });
+      const originalModel = get(this, 'model');
+      set(this, 'onError', (model) => {
+        assert.equal(model, originalModel);
+      });
 
-        await renderForm(this);
+      await renderForm(this);
 
-        triggerEvent('.light-form', 'submit');
-      }
-    );
+      triggerEvent('.light-form', 'submit');
+    });
 
     test('has "light-form--validating" class after submit', async function(assert) {
       await renderForm(this);
