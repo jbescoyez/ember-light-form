@@ -1,17 +1,15 @@
+import Component from '@ember/component';
+import EmberObject, { set, get } from '@ember/object';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from 'ember-test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-import Ember from 'ember';
-
 import { triggerEvent, find, fillIn, waitUntil }
   from 'ember-native-dom-helpers';
 
-let { Component, get, set } = Ember;
-
 const modelWithErrorsStub = (modelName, modelId) => {
-  return Ember.Object.create({
+  return EmberObject.create({
     constructor: { modelName: modelName },
     id: modelId,
     error: { test: { validation: ['errorMessage'] } }

@@ -1,13 +1,8 @@
-import Ember from 'ember';
+import { computed, setProperties, set, get } from '@ember/object';
+import { oneWay, notEmpty } from '@ember/object/computed';
+import Component from '@ember/component';
 import layout from 'ember-light-form/templates/components/light-field';
 import Configuration from './../configuration';
-
-const {
-  get, set, setProperties,
-  computed,
-  computed: { notEmpty, oneWay},
-  Component
-} = Ember;
 
 const Field = Component.extend({
   // -- Properties --

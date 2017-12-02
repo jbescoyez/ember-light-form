@@ -1,14 +1,10 @@
-import Ember from 'ember';
+import { set, get } from '@ember/object';
+import { readOnly } from '@ember/object/computed';
+import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import layout from 'ember-light-form/templates/components/light-form';
 import { invokeAction } from 'ember-invoke-action';
 import Configuration from './../configuration';
-
-const {
-  get, set,
-  computed : { readOnly },
-  Component
-} = Ember;
 
 const Form = Component.extend({
   layout,

@@ -1,7 +1,5 @@
-import Ember from 'ember';
+import { get } from '@ember/object';
 import OneWayInput from 'ember-one-way-controls/components/one-way-input';
-
-const { get } = Ember;
 
 OneWayInput.reopen({
   didInsertElement() {
