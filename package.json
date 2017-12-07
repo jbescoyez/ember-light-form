@@ -1,6 +1,6 @@
 {
   "name": "ember-light-form",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Extensible Ember Form components - Take control over your form controls.",
   "keywords": [
     "ember-addon"
