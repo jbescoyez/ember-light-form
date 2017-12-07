@@ -43,7 +43,7 @@ ember install ember-light-form
 
 ## Built-in controls
 
-Built-in controls rely on (ember-one-way-controls)[https://github.com/DockYard/ember-one-way-controls/].
+Built-in controls rely on [ember-one-way-controls](https://github.com/DockYard/ember-one-way-controls/).
 
 The available controls are:
 
