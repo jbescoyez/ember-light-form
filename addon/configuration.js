@@ -15,7 +15,7 @@ const DEFAULTS = {
   ```js
   // config/environment.js
   ENV['ember-light-form'] = {
-    isValidPath: 'validations.isValid'
+    isValidPath: 'validations.isValid',
     errorMessagePath: 'validations.attrs.FIELD_NAME.messages'
   };
   ```
