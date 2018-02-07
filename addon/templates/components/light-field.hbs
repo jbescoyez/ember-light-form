@@ -1,6 +1,6 @@
 {{#if label}}
-  <label for={{controlId}} class="light-field__label">
-    {{label}} <span class="light-field__errors">({{errors}})</span>
+  <label for={{controlId}} class="light-field__label {{if errors 'light-field__in-errors'}}">
+    {{label}} {{#if errors}}<span class="light-field__errors">({{errors}})</span>{{/if}}
   </label>
 {{/if}}
 
@@ -9,6 +9,7 @@
     (hash
       controlId=controlId
       value=(get model fieldName)
+      label=label
       enterEditMode=(action 'enterEditMode')
       leaveEditMode=(action 'leaveEditMode')
       update=(action 'update')
