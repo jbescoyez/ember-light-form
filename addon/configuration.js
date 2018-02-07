@@ -2,8 +2,8 @@ import { getWithDefault } from '@ember/object';
 import { typeOf } from '@ember/utils';
 
 const DEFAULTS = {
-  isValidPath: 'isValid',
-  errorMessagePath: 'error.FIELD_NAME.validation'
+  isValidPath: 'validations.isValid',
+  errorMessagePath: 'validations.attrs.FIELD_NAME.messages'
 };
 
 /**
@@ -15,7 +15,7 @@ const DEFAULTS = {
   ```js
   // config/environment.js
   ENV['ember-light-form'] = {
-    isValidPath: 'validations.isValid'
+    isValidPath: 'validations.isValid',
     errorMessagePath: 'validations.attrs.FIELD_NAME.messages'
   };
   ```
