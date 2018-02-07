@@ -1,5 +1,5 @@
 {{#if label}}
-  <label for={{controlId}} class="light-field__label {{if errors 'light-field__in-errors'}}">
+  <label for={{controlId}} class="light-field__label {{if errors 'light-field__in-errors'}} {{labelClassNames}}">
     {{label}} {{#if errors}}<span class="light-field__errors">({{errors}})</span>{{/if}}
   </label>
 {{/if}}
