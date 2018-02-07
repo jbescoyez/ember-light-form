@@ -7,7 +7,7 @@ const DEFAULTS = {
 };
 
 /**
-  Ember Simple Auth's configuration object.
+  Ember Light Form's configuration object.
 
   To change any of these values, set them on the application's environment
   object, e.g. for :
@@ -15,7 +15,7 @@ const DEFAULTS = {
   ```js
   // config/environment.js
   ENV['ember-light-form'] = {
-    isValidPath: 'validations.isValid'
+    isValidPath: 'validations.isValid',
     errorMessagePath: 'validations.attrs.FIELD_NAME.messages'
   };
   ```
