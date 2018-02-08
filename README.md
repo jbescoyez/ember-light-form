@@ -85,8 +85,8 @@ You can use any plug-in control and bind them to ember-light-form fields as illu
 
 The available attributes are:
 
-* `field.label`: the field label
 * `field.value`: the value of the field attribute (here `author`)
-* `field.update`: the action that updates of the field attribute (here `author`)
 * `field.controlId`: the id of the control (match the label `for` attribute)
+* `field.errors`: the errors of the field attribute
+* `field.update`: the action that updates of the field attribute (here `author`)
 
