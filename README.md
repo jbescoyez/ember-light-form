@@ -17,14 +17,14 @@ ember install ember-light-form
   {{f.field 'title' control=f.text}}
 
   {{!-- A basic textfield with custom label --}}
-  {{f.field 'tags' label='Keywords' control=f.text}}
+  {{f.field 'tags' labelText='Keywords' control=f.text}}
 
   {{!-- A textarea with custom attributes (here required and placeholder) --}}
   {{f.field 'content' control=(component f.textarea required=true placeholder='Your content')}}
 
   {{!-- A field with a custom component (here ember-power-select) --}}
   {{#f.field 'author' as |field|}}
-    {{field.label}}
+    {{field.label 'Author:'}}
 
     {{#power-select options=authors selected=field.value onchange=field.update as |author|}}
       {{author.name}}
@@ -75,7 +75,7 @@ You can use any plug-in control and bind them to ember-light-form fields as illu
 
 ```hbs
 {{#f.field 'author' as |field|}}
-  {{field.label}}
+  {{field.label 'Author:'}}
 
   {{#power-select options=authors selected=field.value onchange=field.update as |author|}}
     {{author.name}}
@@ -86,6 +86,7 @@ You can use any plug-in control and bind them to ember-light-form fields as illu
 The available attributes are:
 
 * `field.value`: the value of the field attribute (here `author`)
+* `field.label`: light-label component that takes a labelText as first positional param
 * `field.controlId`: the id of the control (match the label `for` attribute)
 * `field.errors`: the errors of the field attribute
 * `field.update`: the action that updates of the field attribute (here `author`)

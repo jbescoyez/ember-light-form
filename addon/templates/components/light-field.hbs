@@ -1,21 +1,27 @@
-{{#if label}}
-  <label for={{controlId}} class="light-field__label">
-    {{label}} {{#if isDisplayingErrors}}<span class="light-field__errors">({{errors}})</span>{{/if}}
-  </label>
-{{/if}}
-
 {{#if hasBlock}}
   {{yield
     (hash
       controlId=controlId
       value=(get model fieldName)
       errors=errors
+      label=(component 'light-label' for=controlId
+        errors=errors
+        isDisplayingErrors=isDisplayingErrors
+      )
       enterEditMode=(action 'enterEditMode')
       leaveEditMode=(action 'leaveEditMode')
       update=(action 'update')
     )
   }}
 {{else}}
+  {{#if labelText}}
+    {{light-label labelText for=controlId
+      errors=errors
+      isDisplayingErrors=isDisplayingErrors
+      class=labelClassNames
+    }}
+  {{/if}}
+
   {{component control
     id=controlId
     value=(get model fieldName)
