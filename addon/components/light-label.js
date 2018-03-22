@@ -5,7 +5,7 @@ const Label = Component.extend({
   layout,
   tagName: 'label',
   classNames: ['light-field__label'],
-  attributeBindings: ['for'],
+  attributeBindings: ['for', 'title'],
 });
 
 Label.reopenClass({

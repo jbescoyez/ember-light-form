@@ -40,16 +40,20 @@ const Form = Component.extend({
 
   // Tasks
   submitTask: task(function * () {
-    this.enterValidationMode();
+    if (typeof get(this, 'model').validate === 'function') {
+      this.enterValidationMode();
 
-    yield get(this, 'model').validate();
+      yield get(this, 'model').validate();
 
-    if (get(this, `model.${Configuration.isValidPath}`)) {
-      yield invokeAction(this, 'action', get(this, 'model'));
+      if (get(this, `model.${Configuration.isValidPath}`)) {
+        yield invokeAction(this, 'action', get(this, 'model'));
 
-      this.leaveValidationMode(this);
+        this.leaveValidationMode(this);
+      } else {
+        invokeAction(this, 'onError', get(this, 'model'));
+      }
     } else {
-      invokeAction(this, 'onError', get(this, 'model'));
+      yield invokeAction(this, 'action', get(this, 'model'));
     }
   }).drop(),
 });

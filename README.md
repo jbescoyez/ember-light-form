@@ -16,6 +16,11 @@ ember install ember-light-form
   {{!-- A basic textfield --}}
   {{f.field 'title' control=f.text}}
 
+  {{f.field 'title'
+    control=f.text
+    label=(component f.label 'Title:' class='my-custom-class')
+  }}
+
   {{!-- A basic textfield with custom label --}}
   {{f.field 'tags' labelText='Keywords' control=f.text}}
 

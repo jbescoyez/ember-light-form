@@ -4,7 +4,8 @@
       controlId=controlId
       value=(get model fieldName)
       errors=errors
-      label=(component 'light-label' for=controlId
+      label=(component 'light-label'
+        for=controlId
         errors=errors
         isDisplayingErrors=isDisplayingErrors
       )
@@ -15,10 +16,16 @@
   }}
 {{else}}
   {{#if labelText}}
-    {{light-label labelText for=controlId
+    {{light-label labelText
+      for=controlId
       errors=errors
       isDisplayingErrors=isDisplayingErrors
-      class=labelClassNames
+    }}
+  {{else if label}}
+    {{component label
+      for=controlId
+      isDisplayingErrors=isDisplayingErrors
+      errors=errors
     }}
   {{/if}}
 
