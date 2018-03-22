@@ -34,7 +34,7 @@ const renderField = function () {
   return render(
     hbs`
     {{light-field fieldName
-      label=label
+      labelText=label
       model=model
       isErrorDisplayForced=isErrorDisplayForced
       control=(component 'dummy-control')
