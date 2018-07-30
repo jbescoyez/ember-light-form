@@ -9,8 +9,8 @@ const Field = Component.extend({
   layout,
   classNames: ['light-field'],
   classNameBindings: ['isDisplayingErrors:light-field--with-errors'],
-  isEdited: false,
-  isErrorDisplayForced: true,
+  isBeingEdited: false,
+  isErrorDisplayForced: false,
   isTouched: false,
   wasDisplayingErrors: false,
 
@@ -21,7 +21,7 @@ const Field = Component.extend({
   isDisplayingErrors: computed(
     'hasErrors',
     'isErrorDisplayForced',
-    'isEdited',
+    'isBeingEdited',
     'wasDisplayingErrors',
     'isTouched',
     function() {
@@ -29,7 +29,7 @@ const Field = Component.extend({
 
       if(get(this, 'isErrorDisplayForced')) { return true; }
 
-      if(get(this, 'isEdited')) {
+      if(get(this, 'isBeingEdited')) {
         return get(this, 'wasDisplayingErrors');
       } else {
         return get(this, 'isTouched');
@@ -71,7 +71,7 @@ const Field = Component.extend({
 
   _resetAttrs() {
     setProperties(this, {
-      isTouched: false, wasDisplayingErrors: false, isEdited: false
+      isTouched: false, wasDisplayingErrors: false, isBeingEdited: false
     });
   },
 
@@ -83,10 +83,10 @@ const Field = Component.extend({
     },
     enterEditMode() {
       set(this, 'wasDisplayingErrors', get(this, 'isDisplayingErrors'));
-      set(this, 'isEdited', true);
+      set(this, 'isBeingEdited', true);
     },
     leaveEditMode() {
-      set(this, 'isEdited', false);
+      set(this, 'isBeingEdited', false);
     }
   }
 });

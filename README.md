@@ -22,7 +22,7 @@ ember install ember-light-form
   }}
 
   {{!-- A basic textfield with custom label --}}
-  {{f.field 'tags' labelText='Keywords' control=f.text}}
+  {{f.field 'tags' label=(label 'Keywords') control=f.text}}
 
   {{!-- A textarea with custom attributes (here required and placeholder) --}}
   {{f.field 'content' control=(component f.textarea required=true placeholder='Your content')}}

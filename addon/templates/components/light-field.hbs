@@ -1,14 +1,22 @@
 {{#if hasBlock}}
   {{yield
     (hash
-      controlId=controlId
-      value=(get model fieldName)
-      errors=errors
       label=(component 'light-label'
         for=controlId
         errors=errors
         isDisplayingErrors=isDisplayingErrors
       )
+      control=(component control
+        id=controlId
+        value=(get model fieldName)
+        onfocus=(action 'enterEditMode')
+        onblur=(action 'leaveEditMode')
+        update=(action 'update')
+      )
+      controlId=controlId
+      value=(get model fieldName)
+      errors=errors
+      isDisplayingErrors=isDisplayingErrors
       enterEditMode=(action 'enterEditMode')
       leaveEditMode=(action 'leaveEditMode')
       update=(action 'update')
