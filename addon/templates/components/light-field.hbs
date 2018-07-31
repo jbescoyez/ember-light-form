@@ -1,11 +1,7 @@
-{{#if hasBlock}}
-  {{yield
-    (hash
-      label=(component 'light-label'
-        for=controlId
-        errors=errors
-        isDisplayingErrors=isDisplayingErrors
-      )
+{{#if (has-block)}}
+  {{#component component
+    field=(hash
+      label=label
       control=(component control
         id=controlId
         value=(get model fieldName)
@@ -22,26 +18,37 @@
       update=(action 'update')
     )
   }}
+    {{yield
+      (hash
+        id=controlId
+        value=(get model fieldName)
+        errors=errors
+        isDisplayingErrors=isDisplayingErrors
+        enterEditMode=(action 'enterEditMode')
+        leaveEditMode=(action 'leaveEditMode')
+        update=(action 'update')
+      )
+    }}
+  {{/component}}
 {{else}}
-  {{#if labelText}}
-    {{light-label labelText
-      for=controlId
+  {{component component
+    field=(hash
+      label=label
+      control=(component control
+        id=controlId
+        value=(get model fieldName)
+        onfocus=(action 'enterEditMode')
+        onblur=(action 'leaveEditMode')
+        update=(action 'update')
+      )
+      controlId=controlId
+      value=(get model fieldName)
       errors=errors
       isDisplayingErrors=isDisplayingErrors
-    }}
-  {{else if label}}
-    {{component label
-      for=controlId
-      isDisplayingErrors=isDisplayingErrors
-      errors=errors
-    }}
-  {{/if}}
-
-  {{component control
-    id=controlId
-    value=(get model fieldName)
-    onfocus=(action 'enterEditMode')
-    onblur=(action 'leaveEditMode')
-    update=(action 'update')
+      enterEditMode=(action 'enterEditMode')
+      leaveEditMode=(action 'leaveEditMode')
+      update=(action 'update')
+    )
   }}
 {{/if}}
+

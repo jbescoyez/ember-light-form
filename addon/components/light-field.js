@@ -6,12 +6,11 @@ import Configuration from './../configuration';
 
 const Field = Component.extend({
   // -- Properties --
-  layout,
-  classNames: ['light-field'],
-  classNameBindings: ['isDisplayingErrors:light-field--with-errors'],
   isBeingEdited: false,
   isErrorDisplayForced: false,
   isTouched: false,
+  layout,
+  tagName: '',
   wasDisplayingErrors: false,
 
   // -- Computed Properties --

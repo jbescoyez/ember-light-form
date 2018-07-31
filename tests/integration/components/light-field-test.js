@@ -26,18 +26,31 @@ const controlStub = () => {
   });
 };
 
+const fieldLayoutStub = () => {
+  return Component.extend({
+    classNames: ['light-field'],
+    classNameBindings: ['field.isDisplayingErrors:light-field--with-errors'],
+    layout: hbs`
+      <label>{{field.label}}</label>
+      {{field.control}}
+    `
+  });
+};
+
 const renderField = function () {
   this.owner.register('component:dummy-control', controlStub());
+  this.owner.register('component:dummy-field-layout', fieldLayoutStub());
 
   if (!get(this, 'fieldName')) { set(this, 'fieldName', 'test') }
 
   return render(
     hbs`
     {{light-field fieldName
-      labelText=label
+      label=label
       model=model
       isErrorDisplayForced=isErrorDisplayForced
       control=(component 'dummy-control')
+      component='dummy-field-layout'
     }}`
   );
 }
