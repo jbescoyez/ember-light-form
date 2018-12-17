@@ -1,26 +1,16 @@
 {{#if (has-block)}}
-  {{#component component
-    field=(hash
-      label=label
-      control=(component control
-        id=controlId
-        value=(get model fieldName)
-        onfocus=(action 'enterEditMode')
-        onblur=(action 'leaveEditMode')
-        update=(action 'update')
-      )
-      controlId=controlId
-      value=(get model fieldName)
-      errors=errors
-      isDisplayingErrors=isDisplayingErrors
-      enterEditMode=(action 'enterEditMode')
-      leaveEditMode=(action 'leaveEditMode')
-      update=(action 'update')
-    )
-  }}
-    {{yield
-      (hash
-        id=controlId
+  {{yield (hash
+    component=(component component
+      field=(hash
+        label=label
+        control=(component control
+          id=controlId
+          value=(get model fieldName)
+          onfocus=(action 'enterEditMode')
+          onblur=(action 'leaveEditMode')
+          update=(action 'update')
+        )
+        controlId=controlId
         value=(get model fieldName)
         errors=errors
         isDisplayingErrors=isDisplayingErrors
@@ -28,8 +18,23 @@
         leaveEditMode=(action 'leaveEditMode')
         update=(action 'update')
       )
-    }}
-  {{/component}}
+    )
+    control=(component control
+      id=controlId
+      value=(get model fieldName)
+      onfocus=(action 'enterEditMode')
+      onblur=(action 'leaveEditMode')
+      update=(action 'update')
+    )
+    label=label
+    controlId=controlId
+    value=(get model fieldName)
+    errors=errors
+    isDisplayingErrors=isDisplayingErrors
+    enterEditMode=(action 'enterEditMode')
+    leaveEditMode=(action 'leaveEditMode')
+    update=(action 'update')
+  )}}
 {{else}}
   {{component component
     field=(hash
