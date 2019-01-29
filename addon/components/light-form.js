@@ -57,6 +57,12 @@ const Form = Component.extend({
       yield invokeAction(this, 'action', get(this, 'model'));
     }
   }).drop(),
+
+  actions: {
+    submit() {
+      this.get('submitTask').perform();
+    }
+  }
 });
 
 Form.reopenClass({
