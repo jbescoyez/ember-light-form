@@ -47,20 +47,20 @@ const Form = Component.extend({
       yield get(this, 'model').validate();
 
       if (get(this, `model.${Configuration.isValidPath}`)) {
-        yield invokeAction(this, 'action', get(this, 'model'));
+        yield invokeAction(this, 'action', get(this, 'model'), ...arguments);
 
         this.leaveValidationMode(this);
       } else {
-        invokeAction(this, 'onError', get(this, 'model'));
+        invokeAction(this, 'onError', get(this, 'model'), ...arguments);
       }
     } else {
-      yield invokeAction(this, 'action', get(this, 'model'));
+      yield invokeAction(this, 'action', get(this, 'model'), ...arguments);
     }
   }).drop(),
 
   actions: {
     submit() {
-      this.get('submitTask').perform();
+      this.get('submitTask').perform(...arguments);
     }
   }
 });
