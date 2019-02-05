@@ -4,7 +4,7 @@ import { typeOf } from '@ember/utils';
 const DEFAULTS = {
   isValidPath: 'isValid',
   errorMessagePath: 'error.FIELD_NAME.validation',
-  defaultFieldComponent: 'defaults/light-field'
+  defaultFieldTemplate: 'defaults/light-field'
 };
 
 /**
@@ -30,14 +30,14 @@ export default {
   /**
     The name of the component to be used by default for the field layout.
 
-    @property defaultFieldComponent
+    @property defaultFieldTemplate
     @readOnly
     @static
     @type String
     @default ''
     @public
   */
-  defaultFieldComponent: DEFAULTS.defaultFieldComponent,
+  defaultFieldTemplate: DEFAULTS.defaultFieldTemplate,
 
   /**
     The isValidPath of the application as configured in `config/environment.js`.

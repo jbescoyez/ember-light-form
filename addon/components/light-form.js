@@ -16,7 +16,7 @@ const Form = Component.extend({
   ],
   isValidating:false,
   isRunning: readOnly('submitTask.isRunning'),
-  defaultFieldComponent: Configuration.defaultFieldComponent,
+  defaultFieldTemplate: Configuration.defaultFieldTemplate,
 
   // Component Hooks
   willDestroyElement() {
