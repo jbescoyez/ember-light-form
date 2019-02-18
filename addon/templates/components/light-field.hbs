@@ -1,15 +1,7 @@
 {{#if (has-block)}}
-  {{#component template
-    class=class
-    field=(hash
+  {{yield 
+    (hash
       label=label
-      control=(component control
-        id=controlId
-        value=(get model fieldName)
-        onfocus=(action 'enterEditMode')
-        onblur=(action 'leaveEditMode')
-        update=(action 'update')
-      )
       controlId=controlId
       value=(get model fieldName)
       errors=errors
@@ -18,40 +10,19 @@
       leaveEditMode=(action 'leaveEditMode')
       update=(action 'update')
     )
-    as |template|
   }}
-    {{yield 
-      (hash
-        label=label
-        controlId=controlId
-        value=(get model fieldName)
-        errors=errors
-        isDisplayingErrors=isDisplayingErrors
-        enterEditMode=(action 'enterEditMode')
-        leaveEditMode=(action 'leaveEditMode')
-        update=(action 'update')
-      )
-      template
-    }}
-  {{/component}}
 {{else}}
-  {{component template
-    field=(hash
-      label=label
-      control=(component control
-        id=controlId
-        value=(get model fieldName)
-        onfocus=(action 'enterEditMode')
-        onblur=(action 'leaveEditMode')
-        update=(action 'update')
-      )
-      controlId=controlId
-      value=(get model fieldName)
-      errors=errors
-      isDisplayingErrors=isDisplayingErrors
-      enterEditMode=(action 'enterEditMode')
-      leaveEditMode=(action 'leaveEditMode')
-      update=(action 'update')
-    )
+  <label for={{controlId}}>{{label}}</label>
+  
+  {{component control 
+    id=controlId
+    value=(get model fieldName)
+    onfocus=(action 'enterEditMode')
+    onblur=(action 'leaveEditMode')
+    update=(action 'update')
   }}
+
+  {{#if isDisplayingErrors}}
+    <span>{{errors}}</span>
+  {{/if}}
 {{/if}}
