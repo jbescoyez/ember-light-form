@@ -4,7 +4,7 @@ import { typeOf } from '@ember/utils';
 const DEFAULTS = {
   isValidPath: 'isValid',
   errorMessagePath: 'error.FIELD_NAME.validation',
-  defaultFieldComponent: 'defaults/light-field'
+  defaultFieldComponent: 'default-field-template'
 };
 
 /**

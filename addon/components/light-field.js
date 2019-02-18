@@ -1,4 +1,4 @@
-import { computed, setProperties, set, get } from '@ember/object';
+import { computed, setProperties, set, get, defineProperty } from '@ember/object';
 import { oneWay, notEmpty } from '@ember/object/computed';
 import Component from '@ember/component';
 import layout from 'ember-light-form/templates/components/light-field';
@@ -63,7 +63,7 @@ const Field = Component.extend({
 
   // -- Private Instance Methods --
   _bindModelErrors() {
-    set(this, 'errors', oneWay(
+    defineProperty(this, 'errors', oneWay(
       `model.${Configuration.errorMessagesPathFor(get(this, 'fieldName'))}`
     ));
   },
