@@ -1,51 +1,7 @@
 {{#if (has-block)}}
-  {{yield (hash
-    component=(component component
-      field=(hash
-        label=label
-        control=(component control
-          id=controlId
-          value=(get model fieldName)
-          onfocus=(action 'enterEditMode')
-          onblur=(action 'leaveEditMode')
-          update=(action 'update')
-        )
-        controlId=controlId
-        value=(get model fieldName)
-        errors=errors
-        isDisplayingErrors=isDisplayingErrors
-        enterEditMode=(action 'enterEditMode')
-        leaveEditMode=(action 'leaveEditMode')
-        update=(action 'update')
-      )
-    )
-    control=(component control
-      id=controlId
-      value=(get model fieldName)
-      onfocus=(action 'enterEditMode')
-      onblur=(action 'leaveEditMode')
-      update=(action 'update')
-    )
-    label=label
-    controlId=controlId
-    value=(get model fieldName)
-    errors=errors
-    isDisplayingErrors=isDisplayingErrors
-    enterEditMode=(action 'enterEditMode')
-    leaveEditMode=(action 'leaveEditMode')
-    update=(action 'update')
-  )}}
-{{else}}
-  {{component component
-    field=(hash
+  {{yield 
+    (hash
       label=label
-      control=(component control
-        id=controlId
-        value=(get model fieldName)
-        onfocus=(action 'enterEditMode')
-        onblur=(action 'leaveEditMode')
-        update=(action 'update')
-      )
       controlId=controlId
       value=(get model fieldName)
       errors=errors
@@ -55,5 +11,18 @@
       update=(action 'update')
     )
   }}
-{{/if}}
+{{else}}
+  <label for={{controlId}}>{{label}}</label>
+  
+  {{component control 
+    id=controlId
+    value=(get model fieldName)
+    onfocus=(action 'enterEditMode')
+    onblur=(action 'leaveEditMode')
+    update=(action 'update')
+  }}
 
+  {{#if isDisplayingErrors}}
+    <span>{{errors}}</span>
+  {{/if}}
+{{/if}}
