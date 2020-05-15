@@ -17,6 +17,9 @@ const Field = Component.extend({
   errors: null,
   hasErrors: notEmpty('errors'),
 
+  warnings: null,
+  hasWarnings: notEmpty('warnings'),
+
   isDisplayingErrors: computed(
     'hasErrors',
     'isErrorDisplayForced',
@@ -47,6 +50,7 @@ const Field = Component.extend({
     this._super(...arguments);
 
     this._bindModelErrors();
+    this._bindModelWarnings();
   },
 
   didUpdateAttrs() {
@@ -65,6 +69,12 @@ const Field = Component.extend({
   _bindModelErrors() {
     defineProperty(this, 'errors', oneWay(
       `model.${Configuration.errorMessagesPathFor(get(this, 'fieldName'))}`
+    ));
+  },
+
+  _bindModelWarnings() {
+    defineProperty(this, 'warnings', oneWay(
+      `model.${Configuration.warningMessagesPathFor(get(this, 'fieldName'))}`
     ));
   },
 

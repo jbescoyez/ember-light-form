@@ -4,6 +4,8 @@ import { typeOf } from '@ember/utils';
 const DEFAULTS = {
   isValidPath: 'isValid',
   errorMessagePath: 'error.FIELD_NAME.validation',
+  hasWarningPath: 'hasWarnings',
+  warningMessagePath: 'warning.FIELD_NAME.validation',
   defaultFieldTemplate: 'light-field'
 };
 
@@ -17,7 +19,9 @@ const DEFAULTS = {
   // config/environment.js
   ENV['ember-light-form'] = {
     isValidPath: 'validations.isValid',
-    errorMessagePath: 'validations.attrs.FIELD_NAME.messages'
+    errorMessagePath: 'validations.attrs.FIELD_NAME.messages',
+    hasWarnings: validations.hasWarnings,
+    warningMessagePath: validations.attrs.FIELD_NAME.warningMessages
   };
   ```
 
@@ -63,8 +67,37 @@ export default {
   */
   errorMessagePath: DEFAULTS.errorMessagePath,
 
+  /**
+    The hasWarningsPath of the application as configured in `config/environment.js`.
+
+    @property hasWarningsPath
+    @readOnly
+    @static
+    @type String
+    @default ''
+    @public
+  */
+  hasWarningsPath: DEFAULTS.hasWarningsPath,
+
+  /**
+    The warningMessagePath of the application as configured in `config/environment.js`.
+
+    @property warningMessagePath
+    @readOnly
+    @static
+    @type String
+    @default ''
+    @public
+  */
+  warningMessagePath: DEFAULTS.warningMessagePath,
+
+
   errorMessagesPathFor(fieldName) {
     return this.errorMessagePath.replace('FIELD_NAME', fieldName);
+  },
+
+  warningMessagesPathFor(fieldName) {
+    return this.warningMessagePath.replace('FIELD_NAME', fieldName);
   },
 
   load(config) {
