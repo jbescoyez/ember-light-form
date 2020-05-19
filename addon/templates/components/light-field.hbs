@@ -1,10 +1,11 @@
 {{#if (has-block)}}
-  {{yield 
+  {{yield
     (hash
       label=label
       controlId=controlId
       value=(get model fieldName)
       errors=errors
+      warnings=warnings
       isDisplayingErrors=isDisplayingErrors
       enterEditMode=(action 'enterEditMode')
       leaveEditMode=(action 'leaveEditMode')
@@ -13,8 +14,8 @@
   }}
 {{else}}
   <label for={{controlId}}>{{label}}</label>
-  
-  {{component control 
+
+  {{component control
     id=controlId
     value=(get model fieldName)
     onfocus=(action 'enterEditMode')
